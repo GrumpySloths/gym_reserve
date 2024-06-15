@@ -110,4 +110,4 @@ if available:
     pay_button.click()
     time.sleep(1)
     #浏览器退出
-    driver.quit()
+    # driver.quit()
