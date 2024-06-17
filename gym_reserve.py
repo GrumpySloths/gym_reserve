@@ -13,6 +13,8 @@ gym_url_dict={
     "羽毛球":"https://gym.sysu.edu.cn/product/show.html?id=161",
     "网球":"https://gym.sysu.edu.cn/product/show.html?id=101"
 }
+
+REVERSED_TIME=21
 # url="https://gym.sysu.edu.cn/product/show.html?id=161"
 url=gym_url_dict["网球"]
 driver.get(url)
@@ -33,7 +35,7 @@ img=driver.find_element(By.ID,"captchaImg")
 img.screenshot("captcha.png")
 time.sleep(0.5)
 #调用云打码识别验证码
-info=subprocess.getoutput("python test.py")
+info=subprocess.getoutput("python captcha_verify.py")
 # print("captchainfo:",info)
 #找到验证码输入框
 captcha=driver.find_element(By.ID,"captcha")
@@ -66,6 +68,10 @@ for li in lis:
         print("data-name:",span.get_attribute("data-name"))
         print("data-timer:",span.get_attribute("data-timer"))
         if span.get_attribute("data-stockid")!= "":
+            #获取data-timer的前两位数字并转化为int，和REVERSED_TIME比较
+            if int(span.get_attribute("data-timer")[:2])!=REVERSED_TIME:
+                print("当前场地可用但不是预定时间")
+                continue
             print("当前场地可用")
             #找到有空位的场地，点击预定
             print("data-stockid:",span.get_attribute("data-stockid"))
